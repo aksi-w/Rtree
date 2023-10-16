@@ -1,5 +1,7 @@
 package Task1;
 
+import java.util.List;
+
 public class Insert {
     private static final int m = 2;
 
@@ -72,20 +74,26 @@ public class Insert {
         }
     }
 
-    public void pickNext(Node<Rectanglable> node1, Node<Rectanglable> node2) {
+    public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) {
         double maxDifference = Double.MIN_VALUE;
-        Rectanglable selectedRectanglable = null;
-        for (Rectanglable rectanglable : node1.rectanglables) {
+        int selectedIndex = -1;
+
+        for (int i = 0; i < rectanglables.size(); i++) {
+            Rectanglable rectanglable = rectanglables.get(i);
             double d1 = node1.getBoundBox().calculateDifference(rectanglable.getRectangle());
             double d2 = node2.getBoundBox().calculateDifference(rectanglable.getRectangle());
             double difference = Math.abs(d1 - d2);
+
             if (difference > maxDifference) {
                 maxDifference = difference;
-                selectedRectanglable = rectanglable;
+                selectedIndex = i;
             }
         }
-        if (selectedRectanglable != null) {
-            node1.rectanglables.remove(selectedRectanglable);
+
+        if (selectedIndex != -1) {
+            Rectanglable selectedRectanglable = rectanglables.get(selectedIndex);
+            rectanglables.remove(selectedIndex);
+
             if (node1.getBoundBox().calculateDifference(selectedRectanglable.getRectangle()) <=
                     node2.getBoundBox().calculateDifference(selectedRectanglable.getRectangle())) {
                 node1.addRectanglable(selectedRectanglable);
@@ -93,5 +101,9 @@ public class Insert {
                 node2.addRectanglable(selectedRectanglable);
             }
         }
+
+        return selectedIndex;
     }
+
+
 }
