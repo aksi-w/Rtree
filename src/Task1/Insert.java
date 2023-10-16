@@ -1,11 +1,13 @@
 package Task1;
 
 import java.util.List;
+import java.util.Stack;
 
 public class Insert {
     private static final int m = 2;
 
-    public Node<Rectanglable> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
+    public Stack<Node<Rectanglable>> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
+        Stack<Node<Rectanglable>> leafStack = new Stack<>();
         Node<Rectanglable> N = root;
 
         while (!N.isLeaf()) {
@@ -27,10 +29,13 @@ public class Insert {
                 }
             }
 
+            leafStack.push(N);
             N = selectedChild;
         }
 
-        return N;
+        leafStack.push(N);
+
+        return leafStack;
     }
 
     public void quadraticSplit(Node<Rectanglable> node1, Node<Rectanglable> node2) {
@@ -49,32 +54,30 @@ public class Insert {
         }
     }
 
-    public void pickSeeds(Node<Rectanglable> node1, Node<Rectanglable> node2) { //переделать
+    public int[] pickSeeds(List<Rectanglable> rectanglables) {
         double maxInefficiency = Double.MIN_VALUE;
-        Rectanglable seed1 = null;
-        Rectanglable seed2 = null;
-        for (int i = 0; i < node1.rectanglables.size(); i++) {
-            for (int j = i + 1; j < node1.rectanglables.size(); j++) {
-                Rectanglable rect1 = node1.rectanglables.get(i);
-                Rectanglable rect2 = node1.rectanglables.get(j);
-                Rectangle combinedRectangle = node1.getBoundBox().getRectangle().combine(rect1.getRectangle(), rect2.getRectangle());
+        int seedIndex1 = -1;
+        int seedIndex2 = -1;
+
+        for (int i = 0; i < rectanglables.size(); i++) {
+            for (int j = i + 1; j < rectanglables.size(); j++) {
+                Rectanglable rect1 = rectanglables.get(i);
+                Rectanglable rect2 = rectanglables.get(j);
+                Rectangle combinedRectangle = combine(rect1.getRectangle(), rect2.getRectangle());
                 double inefficiency = combinedRectangle.square() - rect1.getRectangle().square() - rect2.getRectangle().square();
                 if (inefficiency > maxInefficiency) {
                     maxInefficiency = inefficiency;
-                    seed1 = rect1;
-                    seed2 = rect2;
+                    seedIndex1 = i;
+                    seedIndex2 = j;
                 }
             }
         }
-        if (seed1 != null && seed2 != null) {
-            node1.rectanglables.remove(seed1);
-            node1.rectanglables.remove(seed2);
-            node1.addRectanglable(seed1);
-            node2.addRectanglable(seed2);
-        }
+
+        return new int[] { seedIndex1, seedIndex2 };
     }
 
-    public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) {
+
+    public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) { // по поводу node вопросы?????
         double maxDifference = Double.MIN_VALUE;
         int selectedIndex = -1;
 
@@ -104,6 +107,4 @@ public class Insert {
 
         return selectedIndex;
     }
-
-
 }
