@@ -38,7 +38,11 @@ public class Insert {
         return leafStack;
     }
 
-    public void quadraticSplit(Node<Rectanglable> node1, Node<Rectanglable> node2) {
+    public void quadraticSplit(Node<Rectanglable> node1, Node<Rectanglable> node2) { // на вход список из ректанглаблов , которые нужно разделить
+        // на выход 2 списка разделенных ректанглаблов
+        //УДАЛЕНИЕ ПРОИСХОДИТ В ЭТОМ МЕТОДЕ ПО ИНДЕКСУ
+        //выборка наиболее крутых кандидатов при разделении и создаем 2 ректанглабла , которые будут меняться , сначала он равен командиру команды
+        // метод нужен для возврата 2 списков , который будет хранить 2 поля(1 и 2 кучки) и этот метод будет возвращать экземпляр этого класса, который будет хранить эти 2 списка, которые мы завели ранее
         pickSeeds(node1, node2);
         while (!node1.rectanglables.isEmpty() && !node2.rectanglables.isEmpty()) {
             pickNext(node1, node2);
@@ -63,7 +67,7 @@ public class Insert {
             for (int j = i + 1; j < rectanglables.size(); j++) {
                 Rectanglable rect1 = rectanglables.get(i);
                 Rectanglable rect2 = rectanglables.get(j);
-                Rectangle combinedRectangle = combine(rect1.getRectangle(), rect2.getRectangle());
+                Rectangle combinedRectangle = combine(rect1.getRectangle(), rect2.getRectangle()); //почему не работает
                 double inefficiency = combinedRectangle.square() - rect1.getRectangle().square() - rect2.getRectangle().square();
                 if (inefficiency > maxInefficiency) {
                     maxInefficiency = inefficiency;
