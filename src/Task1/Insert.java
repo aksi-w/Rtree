@@ -58,26 +58,26 @@ public class Insert {
         }
     }
 
-    public int[] pickSeeds(List<Rectanglable> rectanglables) {
+    public Group pickSeeds(List<Rectanglable> rectanglables) {
         double maxInefficiency = Double.MIN_VALUE;
-        int seedIndex1 = -1;
-        int seedIndex2 = -1;
+        int group1 = -1;
+        int group2 = -1;
 
         for (int i = 0; i < rectanglables.size(); i++) {
             for (int j = i + 1; j < rectanglables.size(); j++) {
                 Rectanglable rect1 = rectanglables.get(i);
                 Rectanglable rect2 = rectanglables.get(j);
-                Rectangle combinedRectangle = combine(rect1.getRectangle(), rect2.getRectangle()); //почему не работает
+                Rectangle combinedRectangle = Rectangle.combine(rect1.getRectangle(), rect2.getRectangle());
                 double inefficiency = combinedRectangle.square() - rect1.getRectangle().square() - rect2.getRectangle().square();
                 if (inefficiency > maxInefficiency) {
                     maxInefficiency = inefficiency;
-                    seedIndex1 = i;
-                    seedIndex2 = j;
+                    group1 = i;
+                    group2 = j;
                 }
             }
         }
 
-        return new int[] { seedIndex1, seedIndex2 };
+        return new Group(group1, group2);
     }
 
 
@@ -96,7 +96,6 @@ public class Insert {
                 selectedIndex = i;
             }
         }
-
         if (selectedIndex != -1) {
             Rectanglable selectedRectanglable = rectanglables.get(selectedIndex);
             rectanglables.remove(selectedIndex);
