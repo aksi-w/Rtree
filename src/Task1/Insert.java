@@ -81,7 +81,7 @@ public class Insert {
     }
 
 
-    public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) { // по поводу node вопросы?????
+    public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) {
         double maxDifference = Double.MIN_VALUE;
         int selectedIndex = -1;
 
