@@ -11,8 +11,18 @@ public abstract class Node<T extends Rectanglable> {
         this.boundBox = boundBox;
         this.rectanglables = new ArrayList<>();
     }
-    public abstract void addRectanglable(T rectanglable);
-    public Rectangle getBoundBox() {return boundBox;}
+    public void addRectanglable(T rectanglable) {
+        rectanglables.add(rectanglable);
+        for (T lala : rectanglables) {
+            Rectangle rect = lala.getRectangle();
+            if (rect.intersects(boundBox)) {
+                boundBox = boundBox.combine(boundBox, rect);
+            }
+        }
+    }
+    public Rectangle getBoundBox() {
+        return boundBox;
+    }
 
     abstract boolean isLeaf();
     abstract int size();
