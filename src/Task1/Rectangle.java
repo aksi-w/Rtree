@@ -11,6 +11,8 @@ public class Rectangle implements Rectanglable{
         this.y2 = Math.max(y1, y2);
     }
 
+
+
     public boolean intersects(Rectangle otherRectangle) {
         return x1 < otherRectangle.x2 && x2 > otherRectangle.x1 && y1 < otherRectangle.y2 && y2 > otherRectangle.y1;
     }
@@ -25,7 +27,7 @@ public class Rectangle implements Rectanglable{
         return Math.abs(currentSquare - otherSquare);
     }
 
-    public Rectangle combine(Rectangle rect1, Rectangle rect2) {
+    public static Rectangle combine(Rectangle rect1, Rectangle rect2) {
         double minX = Math.min(rect1.x1, rect2.x1);
         double minY = Math.min(rect1.y1, rect2.y1);
         double maxX = Math.max(rect1.x2, rect2.x2);
