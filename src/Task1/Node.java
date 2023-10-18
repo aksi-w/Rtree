@@ -8,9 +8,10 @@ public abstract class Node<T extends Rectanglable> {
     public List<T> rectanglables;
 
     public Node(Rectangle boundBox) {
-        this.boundBox = boundBox;
+        this.boundBox = null;
         this.rectanglables = new ArrayList<>();
     }
+
     public void addRectanglable(T rectanglable) {
         rectanglables.add(rectanglable);
         for (T lala : rectanglables) {
