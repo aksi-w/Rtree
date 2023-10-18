@@ -90,14 +90,14 @@ public class Insert {
         }
     }
 
-    public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) {
+    public int pickNext(List<Rectanglable> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
         double maxDifference = Double.MIN_VALUE;
         int selectedIndex = -1;
 
         for (int i = 0; i < rectanglables.size(); i++) {
             Rectanglable rectanglable = rectanglables.get(i);
-            double d1 = node1.getBoundBox().calculateDifference(rectanglable.getRectangle());
-            double d2 = node2.getBoundBox().calculateDifference(rectanglable.getRectangle());
+            double d1 = groupBoundBox1.calculateDifference(rectanglable.getRectangle());
+            double d2 = groupBoundBox2.calculateDifference(rectanglable.getRectangle());
             double difference = Math.abs(d1 - d2);
 
             if (difference > maxDifference) {
@@ -105,17 +105,18 @@ public class Insert {
                 selectedIndex = i;
             }
         }
-        if (selectedIndex != -1) {
-            Rectanglable selectedRectanglable = rectanglables.get(selectedIndex);
-            rectanglables.remove(selectedIndex);
-
-            if (node1.getBoundBox().calculateDifference(selectedRectanglable.getRectangle()) <=
-                    node2.getBoundBox().calculateDifference(selectedRectanglable.getRectangle())) {
-                node1.addRectanglable(selectedRectanglable);
-            } else {
-                node2.addRectanglable(selectedRectanglable);
-            }
-        }
+        // за удаление отвечает quadraticSplit
+//        if (selectedIndex != -1) {
+//            Rectanglable selectedRectanglable = rectanglables.get(selectedIndex);
+//            rectanglables.remove(selectedIndex);
+//
+//            if (node1.getBoundBox().calculateDifference(selectedRectanglable.getRectangle()) <=
+//                    node2.getBoundBox().calculateDifference(selectedRectanglable.getRectangle())) {
+//                node1.addRectanglable(selectedRectanglable);
+//            } else {
+//                node2.addRectanglable(selectedRectanglable);
+//            }
+//        }
 
         return selectedIndex;
     }
