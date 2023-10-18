@@ -80,6 +80,15 @@ public class Insert {
         return new Group(group1, group2);
     }
 
+    private class Group {
+        public final int group1;
+        public final int group2;
+
+        public Group(int group1, int group2) {
+            this.group1 = group1;
+            this.group2 = group2;
+        }
+    }
 
     public int pickNext(List<Rectanglable> rectanglables, Node<Rectanglable> node1, Node<Rectanglable> node2) {
         double maxDifference = Double.MIN_VALUE;
