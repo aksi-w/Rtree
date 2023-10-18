@@ -27,4 +27,9 @@ public abstract class Node<T extends Rectanglable> {
 
     abstract boolean isLeaf();
     abstract int size();
+
+    public void clear() {
+        rectanglables.clear();
+        boundBox = null;
+    }
 }
