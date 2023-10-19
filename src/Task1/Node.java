@@ -3,7 +3,7 @@ package Task1;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class Node<T extends Rectanglable> {
+public class Node<T extends Rectanglable> {
     protected Rectangle boundBox;
     public List<T> rectanglables;
 
@@ -23,6 +23,7 @@ public  class Node<T extends Rectanglable> {
             boundBox = boundBox.combine(boundBox, rect);
         }
     }
+
     public Rectangle getBoundBox() {
         return boundBox;
     }
@@ -35,6 +36,7 @@ public  class Node<T extends Rectanglable> {
         rectanglables.clear();
         boundBox = null;
     }
+
     int size() {
         return rectanglables.size();
     }
