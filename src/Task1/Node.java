@@ -23,7 +23,6 @@ public  class Node<T extends Rectanglable> {
             boundBox = boundBox.combine(boundBox, rect);
         }
     }
-
     public Rectangle getBoundBox() {
         return boundBox;
     }
@@ -32,12 +31,13 @@ public  class Node<T extends Rectanglable> {
         return rectanglables.isEmpty();
     }
 
-    int size() {
-        return rectanglables.size();
-    }
-
     public void clear() {
         rectanglables.clear();
         boundBox = null;
     }
+    int size() {
+        return rectanglables.size();
+    }
+
+
 }
