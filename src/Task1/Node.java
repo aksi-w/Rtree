@@ -3,7 +3,7 @@ package Task1;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Node<T extends Rectanglable> {
+public  class Node<T extends Rectanglable> {
     protected Rectangle boundBox;
     public List<T> rectanglables;
 
@@ -28,9 +28,13 @@ public abstract class Node<T extends Rectanglable> {
         return boundBox;
     }
 
-    abstract boolean isLeaf();
+    public boolean isLeaf() {
+        return rectanglables.isEmpty();
+    }
 
-    abstract int size();
+    int size() {
+        return rectanglables.size();
+    }
 
     public void clear() {
         rectanglables.clear();
