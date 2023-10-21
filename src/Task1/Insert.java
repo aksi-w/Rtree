@@ -5,18 +5,35 @@ import java.util.List;
 import java.util.Stack;
 
 public class Insert {
-    private static final int m = 4;
+    private static final int M = 4;
+    public Node<Rectanglable> root;
 
-    public void insert(Node<Rectanglable> root, Rectanglable rect) {
-        Stack<Node<Rectanglable>> leafStack = chooseLeaf(root, rect);
 
-        Node<Rectanglable> N = leafStack.pop();
-        N.addRectanglable(rect);
+    public void insert(Rectanglable newRectanglable) {
 
-        if (N.rectanglables.size() > m) {
-            Node<Rectanglable> NN = quadraticSplit(N);
-            adjustTree(leafStack, N, NN);
+        Stack<Node<Rectanglable>> pathStack = chooseLeaf(root, newRectanglable);
+        Node<Rectanglable> leafNode = pathStack.pop();
+
+        Node<Rectanglable> newLeafNode = null;
+        if (leafNode.size() < M) {
+            leafNode.addRectanglable(newRectanglable);
+        } else {
+            newLeafNode = splitNode(leafNode, newRectanglable);
         }
+
+        adjustTree(pathStack, leafNode, newLeafNode);
+
+        if (pathStack.isEmpty() && newLeafNode != null) {
+            Node<Rectanglable> newRoot = new Node<>();
+            newRoot.addRectanglable(new NodeAsRectanglable(leafNode));
+            newRoot.addRectanglable(new NodeAsRectanglable(newLeafNode));
+            root = newRoot;
+        }
+    }
+
+    private Node<Rectanglable> splitNode(Node<Rectanglable> nodeToSplit, Rectanglable newRectanglable) {
+        nodeToSplit.addRectanglable(newRectanglable);
+        return quadraticSplit(nodeToSplit);
     }
 
     public Stack<Node<Rectanglable>> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
@@ -51,14 +68,14 @@ public class Insert {
             P = pathStack.pop();
             P.boundBox = P.getBoundBox().combine(P.getBoundBox(), N.getBoundBox());
             if (NN != null) {
-                if (P.rectanglables.size() < m) {
+                if (P.rectanglables.size() < M) {
                     P.addRectanglable((Rectanglable) NN);
                 } else {
                     PP = quadraticSplit(P);
                     if (pathStack.isEmpty()) {
                         Node<Rectanglable> newRoot = new Node<>();
-                        newRoot.addRectanglable((Rectanglable) P);
-                        newRoot.addRectanglable((Rectanglable) PP);
+                        newRoot.addRectanglable(new NodeAsRectanglable(P));
+                        newRoot.addRectanglable(new NodeAsRectanglable(PP));
                         return;
                     }
                 }
@@ -74,7 +91,6 @@ public class Insert {
 
         List<Rectanglable> rectanglables = new ArrayList<>(node.rectanglables);
 
-
         Group seeds = pickSeeds(rectanglables);
         Rectanglable seed1 = rectanglables.remove(seeds.group1);
         Rectanglable seed2 = rectanglables.remove(seeds.group2 > seeds.group1 ? seeds.group2 - 1 : seeds.group2);
@@ -89,7 +105,7 @@ public class Insert {
 
             if (node.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) <
                     newNode.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) ||
-                    newNode.rectanglables.size() >= m) {
+                    newNode.rectanglables.size() >= M) {
                 node.addRectanglable(nextRectanglable);
             } else {
                 newNode.addRectanglable(nextRectanglable);
@@ -98,7 +114,6 @@ public class Insert {
 
         return newNode;
     }
-
 
     public Group pickSeeds(List<Rectanglable> rectanglables) {
         double maxInefficiency = Double.MIN_VALUE;
@@ -147,3 +162,4 @@ public class Insert {
         return selectedIndex;
     }
 }
+
