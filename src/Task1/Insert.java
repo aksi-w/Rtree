@@ -5,8 +5,19 @@ import java.util.List;
 import java.util.Stack;
 
 public class Insert {
-    private static final int m = 2;
+    private static final int m = 4;
 
+    public void insert(Node<Rectanglable> root, Rectanglable rect) {
+        Stack<Node<Rectanglable>> leafStack = chooseLeaf(root, rect);
+
+        Node<Rectanglable> N = leafStack.pop();
+        N.addRectanglable(rect);
+
+        if (N.rectanglables.size() > m) {
+            Node<Rectanglable> NN = quadraticSplit(N);
+            adjustTree(leafStack, N, NN);
+        }
+    }
 
     public Stack<Node<Rectanglable>> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
         Stack<Node<Rectanglable>> leafStack = new Stack<>();
@@ -112,6 +123,7 @@ public class Insert {
     private class Group {
         public final int group1;
         public final int group2;
+
         public Group(int group1, int group2) {
             this.group1 = group1;
             this.group2 = group2;
