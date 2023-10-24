@@ -37,7 +37,7 @@ public class Node<T extends Rectanglable> implements Rectanglable {
         }
     }
 
-    public void addChild(T child){
+    public void addChild(Node<T> child){
 
     }
 
