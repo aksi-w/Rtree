@@ -6,8 +6,12 @@ import java.util.Stack;
 
 public class Insert {
     private static final int M = 4;
+
     public Node<Rectanglable> root;
 
+    public Insert(Node<Rectanglable> root) {
+        this.root = root;
+    }
 
     public void insert(Rectanglable newRectanglable) {
 
@@ -42,16 +46,16 @@ public class Insert {
         while (!N.isLeaf()) {
             double minDelta = Double.MAX_VALUE;
             Node<Rectanglable> selectedChild = null;
-            for (Rectanglable child : N.rectanglables) {
-                Rectangle childRect = child.getRectangle();
-                Rectangle deltaRect = childRect.combine(childRect, rect.getRectangle());
+            for (Node<Rectanglable> child : N.getChild()) {
+                Rectangle childRect = child.getBoundBox();
+                Rectangle deltaRect = Rectangle.combine(childRect, rect.getRectangle());
                 double delta = deltaRect.square() - childRect.square();
                 if (delta < minDelta) {
                     minDelta = delta;
-                    selectedChild = (Node<Rectanglable>) child;
+                    selectedChild =  child;
                 } else if (delta == minDelta) {
                     if (childRect.square() < selectedChild.getBoundBox().square()) {
-                        selectedChild = (Node<Rectanglable>) child;
+                        selectedChild = child;
                     }
                 }
             }
@@ -68,14 +72,15 @@ public class Insert {
             P = pathStack.pop();
             P.boundBox = P.getBoundBox().combine(P.getBoundBox(), N.getBoundBox());
             if (NN != null) {
-                if (P.rectanglables.size() < M) {
-                    P.addRectanglable((Rectanglable) NN);
+                if (P.value().size() < M) {
+                    P.addRectanglable(new NodeAsRectanglable(NN));
                 } else {
                     PP = quadraticSplit(P);
                     if (pathStack.isEmpty()) {
                         Node<Rectanglable> newRoot = new Node<>();
                         newRoot.addRectanglable(new NodeAsRectanglable(P));
                         newRoot.addRectanglable(new NodeAsRectanglable(PP));
+                        root = newRoot;
                         return;
                     }
                 }
@@ -89,7 +94,7 @@ public class Insert {
     public Node<Rectanglable> quadraticSplit(Node<Rectanglable> node) {
         Node<Rectanglable> newNode = new Node<>();
 
-        List<Rectanglable> rectanglables = new ArrayList<>(node.rectanglables);
+        List<Rectanglable> rectanglables = new ArrayList<>(node.value());
 
         Group seeds = pickSeeds(rectanglables);
         Rectanglable seed1 = rectanglables.remove(seeds.group1);
@@ -105,7 +110,7 @@ public class Insert {
 
             if (node.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) <
                     newNode.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) ||
-                    newNode.rectanglables.size() >= M) {
+                    newNode.value().size() >= M) {
                 node.addRectanglable(nextRectanglable);
             } else {
                 newNode.addRectanglable(nextRectanglable);
@@ -143,6 +148,7 @@ public class Insert {
             this.group1 = group1;
             this.group2 = group2;
         }
+
     }
 
     public int pickNext(List<Rectanglable> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
@@ -162,4 +168,3 @@ public class Insert {
         return selectedIndex;
     }
 }
-
