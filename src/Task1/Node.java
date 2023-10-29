@@ -25,19 +25,17 @@ public class Node<T extends Rectanglable> implements Rectanglable {
     }
 
     public void addRectanglable(T rectanglable) {
-
-        /*
         rectanglables.add(rectanglable);
         Rectangle rect = rectanglable.getRectangle();
-        if (rect.intersects(boundBox)) {
-            boundBox = boundBox.combine(boundBox, rect);
-        }*/
         if (boundBox == null) {
-            boundBox = rectanglable.getRectangle();
+            boundBox = rect;
+        } else {
+            boundBox = boundBox.combine(boundBox, rect);
         }
     }
 
-    public void addChild(Node<T> child){
+
+    public void addChild(Node<T> child) {
 
     }
 
