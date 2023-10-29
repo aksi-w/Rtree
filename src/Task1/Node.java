@@ -30,13 +30,18 @@ public class Node<T extends Rectanglable> implements Rectanglable {
         if (boundBox == null) {
             boundBox = rect;
         } else {
-            boundBox = boundBox.combine(boundBox, rect);
+            boundBox = Rectangle.combine(boundBox, rect);
         }
     }
 
 
-    public void addChild(Node<T> child) {
-
+    public void addChild(Node<T> childRectanglable) {
+        child.add(childRectanglable);
+        if (boundBox == null) {
+            boundBox = childRectanglable.getBoundBox();
+        } else {
+            boundBox = Rectangle.combine(boundBox, childRectanglable.getBoundBox());
+        }
     }
 
     public Rectangle getBoundBox() {
