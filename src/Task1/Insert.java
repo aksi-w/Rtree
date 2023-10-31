@@ -6,7 +6,6 @@ import java.util.Stack;
 
 public class Insert {
     private static final int M = 4;
-
     public Node<Rectanglable> root;
 
     public Insert(Node<Rectanglable> root) {
@@ -14,7 +13,6 @@ public class Insert {
     }
 
     public void insert(Rectanglable newRectanglable) {
-
         Stack<Node<Rectanglable>> pathStack = chooseLeaf(root, newRectanglable);
         Node<Rectanglable> leafNode = pathStack.pop();
 
@@ -43,7 +41,7 @@ public class Insert {
     public Stack<Node<Rectanglable>> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
         Stack<Node<Rectanglable>> leafStack = new Stack<>();
         Node<Rectanglable> N = root;
-        while (!N.isLeaf()) {
+        while (N != null && !N.isLeaf()) { // Добавлена проверка N != null
             double minDelta = Double.MAX_VALUE;
             Node<Rectanglable> selectedChild = null;
             for (Node<Rectanglable> child : N.getChild()) {
@@ -52,7 +50,7 @@ public class Insert {
                 double delta = deltaRect.square() - childRect.square();
                 if (delta < minDelta) {
                     minDelta = delta;
-                    selectedChild =  child;
+                    selectedChild = child;
                 } else if (delta == minDelta) {
                     if (childRect.square() < selectedChild.getBoundBox().square()) {
                         selectedChild = child;
@@ -62,15 +60,18 @@ public class Insert {
             leafStack.push(N);
             N = selectedChild;
         }
-        leafStack.push(N);
+        if (N != null) {
+            leafStack.push(N);
+        }
         return leafStack;
     }
+
 
     public void adjustTree(Stack<Node<Rectanglable>> pathStack, Node<Rectanglable> N, Node<Rectanglable> NN) {
         Node<Rectanglable> P, PP = null;
         while (!pathStack.isEmpty()) {
             P = pathStack.pop();
-            P.boundBox = P.getBoundBox().combine(P.getBoundBox(), N.getBoundBox());
+            P.boundBox = Rectangle.combine(P.getBoundBox(), N.getBoundBox());
             if (NN != null) {
                 if (P.value().size() < M) {
                     P.addRectanglable(new NodeAsRectanglable(NN));
@@ -148,7 +149,6 @@ public class Insert {
             this.group1 = group1;
             this.group2 = group2;
         }
-
     }
 
     public int pickNext(List<Rectanglable> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
@@ -165,6 +165,28 @@ public class Insert {
                 selectedIndex = i;
             }
         }
+
+        if (selectedIndex == -1) {
+            selectedIndex = 0;
+        }
+
         return selectedIndex;
     }
+
+    public void printTree(Node<Rectanglable> node, int depth) {
+        if (node != null) {
+            for (int i = 0; i < depth; i++) {
+                System.out.print("  ");
+            }
+
+            for (Rectanglable rect : node.value()) {
+                System.out.println(rect);
+            }
+
+            for (Node<Rectanglable> child : node.getChild()) {
+                printTree(child, depth + 1);
+            }
+        }
+    }
+
 }
