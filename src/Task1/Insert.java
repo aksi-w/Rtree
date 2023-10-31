@@ -1,11 +1,9 @@
 package Task1;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Insert {
-    private static final int M = 4;
+    private static final int M = 3;
     public Node<Rectanglable> root;
 
     public Insert(Node<Rectanglable> root) {
@@ -27,8 +25,8 @@ public class Insert {
 
         if (pathStack.isEmpty() && newLeafNode != null) {
             Node<Rectanglable> newRoot = new Node<>();
-            newRoot.addRectanglable(new NodeAsRectanglable(leafNode));
-            newRoot.addRectanglable(new NodeAsRectanglable(newLeafNode));
+            newRoot.addChild(leafNode);
+            newRoot.addChild(newLeafNode);
             root = newRoot;
         }
     }
@@ -41,7 +39,7 @@ public class Insert {
     public Stack<Node<Rectanglable>> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
         Stack<Node<Rectanglable>> leafStack = new Stack<>();
         Node<Rectanglable> N = root;
-        while (N != null && !N.isLeaf()) { // Добавлена проверка N != null выскакивала ошибка
+        while (N != null && !N.isLeaf()) {
             double minDelta = Double.MAX_VALUE;
             Node<Rectanglable> selectedChild = null;
             for (Node<Rectanglable> child : N.getChild()) {
@@ -66,21 +64,20 @@ public class Insert {
         return leafStack;
     }
 
-
     public void adjustTree(Stack<Node<Rectanglable>> pathStack, Node<Rectanglable> N, Node<Rectanglable> NN) {
         Node<Rectanglable> P, PP = null;
         while (!pathStack.isEmpty()) {
             P = pathStack.pop();
             P.boundBox = Rectangle.combine(P.getBoundBox(), N.getBoundBox());
             if (NN != null) {
-                if (P.value().size() < M) {
-                    P.addRectanglable(new NodeAsRectanglable(NN));
+                if (P.size() < M) {
+                    P.addChild(NN);
                 } else {
                     PP = quadraticSplit(P);
                     if (pathStack.isEmpty()) {
                         Node<Rectanglable> newRoot = new Node<>();
-                        newRoot.addRectanglable(new NodeAsRectanglable(P));
-                        newRoot.addRectanglable(new NodeAsRectanglable(PP));
+                        newRoot.addChild(P);
+                        newRoot.addChild(PP);
                         root = newRoot;
                         return;
                     }
@@ -111,7 +108,7 @@ public class Insert {
 
             if (node.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) <
                     newNode.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) ||
-                    newNode.value().size() >= M) {
+                    newNode.size() >= M) {
                 node.addRectanglable(nextRectanglable);
             } else {
                 newNode.addRectanglable(nextRectanglable);
@@ -151,6 +148,7 @@ public class Insert {
         }
     }
 
+
     public int pickNext(List<Rectanglable> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
         double maxDifference = Double.MIN_VALUE;
         int selectedIndex = -1;
@@ -167,10 +165,29 @@ public class Insert {
         }
 
         if (selectedIndex == -1) {
-            selectedIndex = 0; // добавила тут, потому что выскакивала ошибка
+            selectedIndex = 0;
         }
 
         return selectedIndex;
     }
+
+    public void print() {
+
+        Queue<Node<Rectanglable>> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            Node<Rectanglable> currentNode = queue.poll();
+
+            for (Rectanglable rect : currentNode.value()) {
+                System.out.println(rect.getRectangle());
+            }
+
+            for (Node<Rectanglable> child : currentNode.getChild()) {
+                queue.add(child);
+            }
+        }
+    }
+
 
 }
