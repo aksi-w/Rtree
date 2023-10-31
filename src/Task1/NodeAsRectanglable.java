@@ -11,5 +11,10 @@ public class NodeAsRectanglable implements Rectanglable {
     public Rectangle getRectangle() {
         return node.getBoundBox();
     }
+    @Override
+    public void display() {
+
+    }
+
 }
 
