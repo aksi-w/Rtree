@@ -2,7 +2,7 @@ package Task1;
 
 public class Main {
     public static void main(String[] args) {
-        Insert insert = new Insert();
+        Insert insert = new Insert(new Node<Rectanglable>());
 
         Rectanglable rect1 = new Rectangle(0, 0, 2, 2);
         Rectanglable rect2 = new Rectangle(1, 1, 3, 3);
@@ -16,9 +16,8 @@ public class Main {
         insert.insert(rect4);
         insert.insert(rect5);
 
-
-        for (Rectanglable rectanglable : insert.root.rectanglables) {
-            System.out.println(rectanglable.getRectangle());
-        }
+        insert.print();
     }
+
+
 }

@@ -69,8 +69,4 @@ public class Node<T extends Rectanglable> implements Rectanglable {
         return getBoundBox();
     }
 
-    @Override
-    public void display() {
-    }
-
 }

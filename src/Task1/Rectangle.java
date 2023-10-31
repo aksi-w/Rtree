@@ -1,7 +1,27 @@
 package Task1;
 
 public class Rectangle implements Rectanglable {
-    private final double x1, y1, x2, y2;
+    private final double x1;
+
+    public double getX1() {
+        return x1;
+    }
+
+    public double getY1() {
+        return y1;
+    }
+
+    public double getX2() {
+        return x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    private final double y1;
+    private final double x2;
+    private final double y2;
 
     public Rectangle(double x1, double y1, double x2, double y2) {
         this.x1 = Math.min(x1, x2);
@@ -41,9 +61,9 @@ public class Rectangle implements Rectanglable {
     public Rectangle getRectangle() {
         return this;
     }
-
     @Override
-    public void display() {
-        System.out.println("Rectangle: (" + x1 + ", " + y1 + ")  (" + x2 + ", " + y2 + ")");
+    public String toString() {
+        return "Rectangle(" + x1 + ", " + y1 + ", " + x2 + ", " + y2 + ")";
     }
+
 }
