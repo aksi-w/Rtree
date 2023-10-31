@@ -42,7 +42,8 @@ public class Rectangle implements Rectanglable {
         return this;
     }
 
-    public String toString() {
-        return "Rectangle [x1=" + x1 + ", y1=" + y1 + ", x2=" + x2 + ", y2=" + y2 + "]";
+    @Override
+    public void display() {
+        System.out.println("Rectangle: (" + x1 + ", " + y1 + ")  (" + x2 + ", " + y2 + ")");
     }
 }
