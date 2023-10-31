@@ -22,7 +22,9 @@ public class Node<T extends Rectanglable> implements Rectanglable {
     public Node() {
         this.boundBox = null;
         this.rectanglables = new ArrayList<>();
+        this.child = new ArrayList<>(); // Инициализируйте поле child
     }
+
 
     public void addRectanglable(T rectanglable) {
         rectanglables.add(rectanglable);
@@ -66,4 +68,9 @@ public class Node<T extends Rectanglable> implements Rectanglable {
     public Rectangle getRectangle() {
         return getBoundBox();
     }
+
+    @Override
+    public void display() {
+    }
+
 }
