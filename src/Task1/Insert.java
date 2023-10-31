@@ -41,7 +41,7 @@ public class Insert {
     public Stack<Node<Rectanglable>> chooseLeaf(Node<Rectanglable> root, Rectanglable rect) {
         Stack<Node<Rectanglable>> leafStack = new Stack<>();
         Node<Rectanglable> N = root;
-        while (N != null && !N.isLeaf()) { // Добавлена проверка N != null
+        while (N != null && !N.isLeaf()) { // Добавлена проверка N != null выскакивала ошибка
             double minDelta = Double.MAX_VALUE;
             Node<Rectanglable> selectedChild = null;
             for (Node<Rectanglable> child : N.getChild()) {
@@ -167,26 +167,10 @@ public class Insert {
         }
 
         if (selectedIndex == -1) {
-            selectedIndex = 0;
+            selectedIndex = 0; // добавила тут, потому что выскакивала ошибка
         }
 
         return selectedIndex;
-    }
-
-    public void printTree(Node<Rectanglable> node, int depth) {
-        if (node != null) {
-            for (int i = 0; i < depth; i++) {
-                System.out.print("  ");
-            }
-
-            for (Rectanglable rect : node.value()) {
-                System.out.println(rect);
-            }
-
-            for (Node<Rectanglable> child : node.getChild()) {
-                printTree(child, depth + 1);
-            }
-        }
     }
 
 }
