@@ -18,13 +18,11 @@ public class Node<T extends Rectanglable> implements Rectanglable {
         return child;
     }
 
-
     public Node() {
         this.boundBox = null;
         this.rectanglables = new ArrayList<>();
-        this.child = new ArrayList<>(); // Инициализируйте поле child
+        this.child = new ArrayList<>();
     }
-
 
     public void addRectanglable(T rectanglable) {
         rectanglables.add(rectanglable);
@@ -35,7 +33,6 @@ public class Node<T extends Rectanglable> implements Rectanglable {
             boundBox = Rectangle.combine(boundBox, rect);
         }
     }
-
 
     public void addChild(Node<T> childRectanglable) {
         child.add(childRectanglable);
