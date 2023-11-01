@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node<T extends Rectanglable> implements Rectanglable {
+
     protected Rectangle boundBox;
 
     private List<T> rectanglables;
@@ -13,7 +14,9 @@ public class Node<T extends Rectanglable> implements Rectanglable {
     public List<T> value() {
         return rectanglables;
     }
-
+    public void setBoundBox(Rectangle boundBox) {
+        this.boundBox = boundBox;
+    }
     public List<Node<T>> getChild() {
         return child;
     }

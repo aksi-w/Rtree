@@ -1,8 +1,11 @@
 package Task1;
 
+
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        Insert insert = new Insert(new Node<Rectanglable>());
+        RTree<Rectanglable> rtree = new RTree<>();
 
         Rectanglable rect1 = new Rectangle(0, 0, 2, 2);
         Rectanglable rect2 = new Rectangle(1, 1, 3, 3);
@@ -10,14 +13,25 @@ public class Main {
         Rectanglable rect4 = new Rectangle(5, 5, 7, 7);
         Rectanglable rect5 = new Rectangle(8, 8, 10, 10);
 
-        insert.insert(rect1);
-        insert.insert(rect2);
-        insert.insert(rect3);
-        insert.insert(rect4);
-        insert.insert(rect5);
+        rtree.insert(rect1);
+        rtree.insert(rect2);
+        rtree.insert(rect3);
+        rtree.insert(rect4);
+        rtree.insert(rect5);
 
-        insert.print();
+        rtree.print();
+
+        Rectangle searchRectangle = new Rectangle(1, 1, 3, 3);
+
+        List<Rectanglable> searchResult = rtree.search(searchRectangle);
+
+        if (!searchResult.isEmpty()) {
+            System.out.println("Результаты поиска:");
+            for (Rectanglable result : searchResult) {
+                System.out.println(result.getRectangle());
+            }
+        } else {
+            System.out.println("Ничего не найдено.");
+        }
     }
-
-
 }

@@ -2,23 +2,6 @@ package Task1;
 
 public class Rectangle implements Rectanglable {
     private final double x1;
-
-    public double getX1() {
-        return x1;
-    }
-
-    public double getY1() {
-        return y1;
-    }
-
-    public double getX2() {
-        return x2;
-    }
-
-    public double getY2() {
-        return y2;
-    }
-
     private final double y1;
     private final double x2;
     private final double y2;
