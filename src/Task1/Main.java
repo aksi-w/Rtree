@@ -21,7 +21,7 @@ public class Main {
 
         rtree.print();
 
-        Rectangle searchRectangle = new Rectangle(1, 1, 3, 3);
+        Rectangle searchRectangle = new Rectangle(2, 2, 7, 7);
 
         List<Rectanglable> searchResult = rtree.search(searchRectangle);
 
