@@ -4,7 +4,7 @@ import java.util.*;
 
 
 public class RTree<T extends Rectanglable> {
-    private static final int M = 3;
+    private static final int M = 5;
     private Node<T> root;
 
     public RTree() {
@@ -161,16 +161,16 @@ public class RTree<T extends Rectanglable> {
         return new Group(group1, group2);
     }
 
-    private class Group {
-        public final int group1;
-        public final int group2;
+private class Group {
+    public final int group1;
+    public final int group2;
 
-        public Group(int group1, int group2) {
-            this.group1 = group1;
-            this.group2 = group2;
-        }
+    public Group(int group1, int group2) {
+        this.group1 = group1;
+        this.group2 = group2;
     }
 
+}
 
     private int pickNext(List<T> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
         double maxDifference = Double.MIN_VALUE;
