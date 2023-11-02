@@ -51,7 +51,7 @@ public class Node<T extends Rectanglable> implements Rectanglable {
     }
 
     public boolean isLeaf() {
-        return rectanglables.isEmpty();
+        return child.isEmpty();
     }
 
     public void clear() {
