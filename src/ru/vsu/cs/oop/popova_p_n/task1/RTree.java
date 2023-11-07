@@ -1,13 +1,14 @@
-package Task1;
+package ru.vsu.cs.oop.popova_p_n.task1;
 
 import java.util.*;
 
 
 public class RTree<T extends Rectanglable> {
-    private static final int M = 5;
+    private final int M;
     private Node<T> root;
 
-    public RTree() {
+    public RTree(int m) {
+        this.M = m;
         root = new Node<T>();
     }
 
@@ -56,10 +57,10 @@ public class RTree<T extends Rectanglable> {
 
     private Node<T> splitNode(Node<T> nodeToSplit, T newRectanglable) {
         nodeToSplit.addRectanglable(newRectanglable);
-        return quadraticSplit(nodeToSplit);
+        return quadraticSplitY(nodeToSplit);
     }
 
-    public Stack<Node<T>> chooseLeaf(Node<T> root, T rect) {
+    private Stack<Node<T>> chooseLeaf(Node<T> root, T rect) {
         Stack<Node<T>> leafStack = new Stack<>();
         Node<T> N = root;
         while (N != null && !N.isLeaf()) {
@@ -87,7 +88,7 @@ public class RTree<T extends Rectanglable> {
         return leafStack;
     }
 
-    public void adjustTree(Stack<Node<T>> pathStack, Node<T> N, Node<T> NN) {
+    private void adjustTree(Stack<Node<T>> pathStack, Node<T> N, Node<T> NN) {
         Node<T> P, PP = null;
         while (!pathStack.isEmpty()) {
             P = pathStack.pop();
@@ -96,7 +97,7 @@ public class RTree<T extends Rectanglable> {
                 if (P.size() < M) {
                     P.addChild(NN);
                 } else {
-                    PP = quadraticSplit(P);
+                    PP = quadraticSplitX(P);
                     if (pathStack.isEmpty()) {
                         Node<T> newRoot = new Node<>();
                         newRoot.addChild(P);
@@ -112,36 +113,84 @@ public class RTree<T extends Rectanglable> {
         }
     }
 
-    private Node<T> quadraticSplit(Node<T> node) {
-        Node<T> newNode = new Node<>();
+    private static class ListPair<T> {
+        private final List<T> first;
+        private final List<T> second;
 
-        List<T> rectanglables = new ArrayList<>(node.value());
-
-        Group seeds = pickSeeds(rectanglables);
-        T seed1 = rectanglables.remove(seeds.group1);
-        T seed2 = rectanglables.remove(seeds.group2 > seeds.group1 ? seeds.group2 - 1 : seeds.group2);
-
-        node.clear();
-        node.addRectanglable(seed1);
-        newNode.addRectanglable(seed2);
-
-        while (!rectanglables.isEmpty()) {
-            int selectedIndex = pickNext(rectanglables, node.getBoundBox(), newNode.getBoundBox());
-            T nextRectanglable = rectanglables.remove(selectedIndex);
-
-            if (node.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) <
-                    newNode.getBoundBox().calculateDifference(nextRectanglable.getRectangle()) ||
-                    newNode.size() >= M) {
-                node.addRectanglable(nextRectanglable);
-            } else {
-                newNode.addRectanglable(nextRectanglable);
-            }
+        public ListPair(List<T> first, List<T> second) {
+            this.first = first;
+            this.second = second;
         }
 
+        public List<T> getFirst() {
+            return first;
+        }
+
+        public List<T> getSecond() {
+            return second;
+        }
+    }
+    private Node<T> quadraticSplitX(Node<T> node) {
+        ListPair<Node<T>> rrr = quadraticSplit(node.getChild(), M);
+        node.clear();
+        for (Node<T> q : rrr.getFirst()) {
+            node.addChild(q);
+        }
+        Node<T> newNode = new Node<>();
+        for (Node<T> q : rrr.getSecond()) {
+            newNode.addChild(q);
+        }
+        return newNode;
+    }
+    private Node<T> quadraticSplitY(Node<T> node) {
+        ListPair<T> rrr = quadraticSplit(node.value(), M);
+        node.clear();
+        for (T q : rrr.getFirst()) {
+            node.addRectanglable(q);
+        }
+        Node<T> newNode = new Node<>();
+        for (T q : rrr.getSecond()) {
+            newNode.addRectanglable(q);
+        }
         return newNode;
     }
 
-    private Group pickSeeds(List<T> rectanglables) {
+    private static <K extends Rectanglable> ListPair<K> quadraticSplit(List<K> node, int M) {
+        List<K> newNode = new ArrayList<>();
+
+        List<K> rectanglables = new ArrayList<>(node);
+
+        Group seeds = pickSeeds(rectanglables);
+        K seed1 = rectanglables.remove(seeds.group1);
+        K seed2 = rectanglables.remove(seeds.group2 > seeds.group1 ? seeds.group2 - 1 : seeds.group2);
+
+        node.clear();
+        node.add(seed1);
+        newNode.add(seed2);
+        Rectangle a = seed1.getRectangle();
+        Rectangle b = seed2.getRectangle();
+
+        while (!rectanglables.isEmpty()) {
+            int selectedIndex = pickNext(rectanglables, a, b);
+            K nextRectanglable = rectanglables.remove(selectedIndex);
+
+            if (a.calculateDifference(nextRectanglable.getRectangle()) <
+                    b.calculateDifference(nextRectanglable.getRectangle()) ||
+                    newNode.size() >= M) {
+                node.add(nextRectanglable);
+                a = Rectangle.combine(a, nextRectanglable.getRectangle());
+            } else {
+                newNode.add(nextRectanglable);
+                b = Rectangle.combine(b, nextRectanglable.getRectangle());
+            }
+        }
+
+        return new ListPair<>(node, newNode);
+    }
+
+
+
+    private static <T extends Rectanglable> Group pickSeeds(List<T> rectanglables) {
         double maxInefficiency = Double.MIN_VALUE;
         int group1 = -1;
         int group2 = -1;
@@ -161,18 +210,18 @@ public class RTree<T extends Rectanglable> {
         return new Group(group1, group2);
     }
 
-private class Group {
-    public final int group1;
-    public final int group2;
+    private static class Group {
+        public final int group1;
+        public final int group2;
 
-    public Group(int group1, int group2) {
-        this.group1 = group1;
-        this.group2 = group2;
+        public Group(int group1, int group2) {
+            this.group1 = group1;
+            this.group2 = group2;
+        }
+
     }
 
-}
-
-    private int pickNext(List<T> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
+    private static <T extends Rectanglable> int pickNext(List<T> rectanglables, Rectangle groupBoundBox1, Rectangle groupBoundBox2) {
         double maxDifference = Double.MIN_VALUE;
         int selectedIndex = -1;
         for (int i = 0; i < rectanglables.size(); i++) {

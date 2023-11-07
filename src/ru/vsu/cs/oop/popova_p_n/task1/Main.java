@@ -1,11 +1,12 @@
-package Task1;
+package ru.vsu.cs.oop.popova_p_n.task1;
 
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        RTree<Rectanglable> rtree = new RTree<>();
+        int M = 5;
+        RTree<Rectanglable> rtree = new RTree<>(M);
 
         Rectanglable rect1 = new Rectangle(0, 0, 2, 2);
         Rectanglable rect2 = new Rectangle(1, 1, 3, 3);

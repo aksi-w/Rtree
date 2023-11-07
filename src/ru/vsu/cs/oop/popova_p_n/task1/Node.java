@@ -1,4 +1,4 @@
-package Task1;
+package ru.vsu.cs.oop.popova_p_n.task1;
 
 import java.util.ArrayList;
 import java.util.List;
